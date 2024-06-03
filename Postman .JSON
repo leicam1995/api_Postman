@@ -1,0 +1,420 @@
+{
+    "collection": {
+        "info": {
+            "_postman_id": "f9bdfc6a-c7d8-4658-9346-636091caaf6f",
+            "name": "Modulo_13",
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+            "updatedAt": "2024-06-03T14:22:21.000Z",
+            "uid": "35395270-f9bdfc6a-c7d8-4658-9346-636091caaf6f",
+            "createdAt": null,
+            "lastUpdatedBy": null
+        },
+        "item": [
+            {
+                "name": "Cadastro de Novo Usuário",
+                "event": [
+                    {
+                        "listen": "test",
+                        "script": {
+                            "id": "741670fa-2f73-40a8-9941-53792cdc7d76",
+                            "exec": [
+                                "pm.test(\"Response status code is 201\", function () {",
+                                "  pm.expect(pm.response.to.have.status(201));",
+                                "});",
+                                "",
+                                "",
+                                "pm.test(\"Response time is less than 500ms\", function () {",
+                                "  pm.expect(pm.response.responseTime).to.be.below(500);",
+                                "});",
+                                "",
+                                "",
+                                "pm.test(\"Response has the required fields - message and _id\", function () {",
+                                "    const responseData = pm.response.json();",
+                                "    ",
+                                "    pm.expect(responseData).to.be.an('object');",
+                                "    pm.expect(responseData).to.have.property('message');",
+                                "    pm.expect(responseData).to.have.property('_id');",
+                                "});",
+                                "",
+                                "",
+                                "pm.test(\"Validate _id format\", function () {",
+                                "  const responseData = pm.response.json();",
+                                "  ",
+                                "  pm.expect(responseData).to.be.an('object');",
+                                "  pm.expect(responseData._id).to.match(/^[0-9a-fA-F]{24}$/, \"ID should be a valid ObjectId format\");",
+                                "});",
+                                ""
+                            ],
+                            "type": "text/javascript",
+                            "packages": {}
+                        }
+                    }
+                ],
+                "id": "e35cfb1b-975e-4585-96b4-d2befdc408cf",
+                "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                },
+                "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                        "mode": "raw",
+                        "raw": "{\r\n  \"nome\": \"Eduardo Maciel\",\r\n  \"email\": \"leicam@example.com\",\r\n  \"password\": \"senha123\",\r\n  \"administrador\": \"true\"\r\n}\r\n\r\n\r\n",
+                        "options": {
+                            "raw": {
+                                "language": "json"
+                            }
+                        }
+                    },
+                    "url": {
+                        "raw": "http://localhost:3000/usuarios",
+                        "protocol": "http",
+                        "host": [
+                            "localhost"
+                        ],
+                        "port": "3000",
+                        "path": [
+                            "usuarios"
+                        ]
+                    }
+                },
+                "response": [],
+                "uid": "35395270-e35cfb1b-975e-4585-96b4-d2befdc408cf"
+            },
+            {
+                "name": "Buscar usuário por ID",
+                "event": [
+                    {
+                        "listen": "test",
+                        "script": {
+                            "id": "0cc82eeb-8c77-4424-8d07-d78d3a09bfcb",
+                            "exec": [
+                                "pm.test(\"Response status code is 200\", function () {",
+                                "  pm.expect(pm.response.code).to.equal(200);",
+                                "});",
+                                "",
+                                "",
+                                "pm.test(\"Response has the required fields - quantidade and usuarios\", function () {",
+                                "    const responseData = pm.response.json();",
+                                "    ",
+                                "    pm.expect(responseData).to.be.an('object');",
+                                "    pm.expect(responseData).to.have.property('quantidade');",
+                                "    pm.expect(responseData).to.have.property('usuarios');",
+                                "});",
+                                "",
+                                "",
+                                "pm.test(\"Password is a non-empty string\", function () {",
+                                "    const responseData = pm.response.json();",
+                                "    ",
+                                "    pm.expect(responseData.usuarios).to.be.an('array');",
+                                "    ",
+                                "    responseData.usuarios.forEach(function(usuario) {",
+                                "        pm.expect(usuario.password).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Password should not be empty\");",
+                                "    });",
+                                "});",
+                                "",
+                                "",
+                                "pm.test(\"Usuarios array is present and contains the expected number of elements\", function () {",
+                                "    const responseData = pm.response.json();",
+                                "    ",
+                                "    pm.expect(responseData).to.be.an('object');",
+                                "    pm.expect(responseData.usuarios).to.exist.and.to.be.an('array');",
+                                "    pm.expect(responseData.usuarios).to.have.lengthOf(responseData.quantidade);",
+                                "});",
+                                "",
+                                "",
+                                "pm.test(\"Response time is less than 200ms\", function () {",
+                                "  pm.expect(pm.response.responseTime).to.be.below(200);",
+                                "});",
+                                ""
+                            ],
+                            "type": "text/javascript",
+                            "packages": {}
+                        }
+                    }
+                ],
+                "id": "ebd6b8b5-2d27-41f9-a1ea-966a6246f551",
+                "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                },
+                "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                        "raw": "http://localhost:3000/usuarios",
+                        "protocol": "http",
+                        "host": [
+                            "localhost"
+                        ],
+                        "port": "3000",
+                        "path": [
+                            "usuarios"
+                        ]
+                    }
+                },
+                "response": [],
+                "uid": "35395270-ebd6b8b5-2d27-41f9-a1ea-966a6246f551"
+            },
+            {
+                "name": "Editar usuário",
+                "event": [
+                    {
+                        "listen": "test",
+                        "script": {
+                            "id": "6025397b-53ff-42a8-9fdc-609fbbda9eac",
+                            "exec": [
+                                "pm.test(\"Response status code is 200\", function () {\r",
+                                "    pm.expect(pm.response.code).to.equal(200);\r",
+                                "});\r",
+                                "\r",
+                                "\r",
+                                "pm.test(\"Response has the required fields\", function () {\r",
+                                "    const responseData = pm.response.json();\r",
+                                "    \r",
+                                "    pm.expect(responseData).to.be.an('object');\r",
+                                "    pm.expect(responseData.message).to.exist;\r",
+                                "});\r",
+                                "\r",
+                                "\r",
+                                "pm.test(\"Message is a non-empty string\", function () {\r",
+                                "  const responseData = pm.response.json();\r",
+                                "\r",
+                                "  pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+                                "});\r",
+                                "\r",
+                                "\r",
+                                "pm.test(\"Response time is less than 200ms\", function () {\r",
+                                "  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+                                "});\r",
+                                ""
+                            ],
+                            "type": "text/javascript",
+                            "packages": {}
+                        }
+                    }
+                ],
+                "id": "2183da1e-d1ad-4eff-8f27-399a76e602bb",
+                "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                },
+                "request": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                        "mode": "raw",
+                        "raw": "{\r\n  \"nome\": \"Eduardo Maciel\",\r\n  \"email\": \"leicam@example.com\",\r\n  \"password\": \"senha123\",\r\n  \"administrador\": \"true\"\r\n}",
+                        "options": {
+                            "raw": {
+                                "language": "json"
+                            }
+                        }
+                    },
+                    "url": {
+                        "raw": "http://localhost:3000/usuarios/WgL7cPtrlMDEYrKr",
+                        "protocol": "http",
+                        "host": [
+                            "localhost"
+                        ],
+                        "port": "3000",
+                        "path": [
+                            "usuarios",
+                            "WgL7cPtrlMDEYrKr"
+                        ]
+                    }
+                },
+                "response": [],
+                "uid": "35395270-2183da1e-d1ad-4eff-8f27-399a76e602bb"
+            },
+            {
+                "name": "Deletar usuário",
+                "event": [
+                    {
+                        "listen": "test",
+                        "script": {
+                            "id": "5e65b059-8da3-408c-bade-0585cf4bfe64",
+                            "exec": [
+                                "pm.test(\"Response status code is 200\", function () {\r",
+                                "    pm.expect(pm.response.code).to.equal(200);\r",
+                                "});\r",
+                                "\r",
+                                "\r",
+                                "pm.test(\"Response has the required fields\", function () {\r",
+                                "    const responseData = pm.response.json();\r",
+                                "    \r",
+                                "    pm.expect(responseData).to.be.an('object');\r",
+                                "    pm.expect(responseData.message).to.exist;\r",
+                                "});\r",
+                                "\r",
+                                "\r",
+                                "pm.test(\"Message is a non-empty string\", function () {\r",
+                                "    const responseData = pm.response.json();\r",
+                                "    \r",
+                                "    pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Message should not be empty\");\r",
+                                "});\r",
+                                "\r",
+                                "\r",
+                                "pm.test(\"Response time is less than 200ms\", function () {\r",
+                                "  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+                                "});\r",
+                                ""
+                            ],
+                            "type": "text/javascript",
+                            "packages": {}
+                        }
+                    }
+                ],
+                "id": "975ad9b3-42c0-43e1-9de3-7b167b09f766",
+                "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                },
+                "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                        "raw": "http://localhost:3000/usuarios/kTKA794TnhM3WAAn",
+                        "protocol": "http",
+                        "host": [
+                            "localhost"
+                        ],
+                        "port": "3000",
+                        "path": [
+                            "usuarios",
+                            "kTKA794TnhM3WAAn"
+                        ]
+                    }
+                },
+                "response": [],
+                "uid": "35395270-975ad9b3-42c0-43e1-9de3-7b167b09f766"
+            },
+            {
+                "name": "Cadastro com email já em uso",
+                "event": [
+                    {
+                        "listen": "test",
+                        "script": {
+                            "id": "3d1699e2-3d3d-4e93-bd56-2d0630201f89",
+                            "exec": [
+                                "pm.test(\"Response status code is 400\", function () {\r",
+                                "    pm.expect(pm.response.code).to.equal(400);\r",
+                                "});\r",
+                                "\r",
+                                "\r",
+                                "pm.test(\"Response has the required fields\", function () {\r",
+                                "    const responseData = pm.response.json();\r",
+                                "    \r",
+                                "    pm.expect(responseData).to.be.an('object');\r",
+                                "    pm.expect(responseData.message).to.exist;\r",
+                                "});\r",
+                                "\r",
+                                "\r",
+                                "pm.test(\"Message is a non-empty string\", function () {\r",
+                                "  const responseData = pm.response.json();\r",
+                                "  \r",
+                                "  pm.expect(responseData).to.be.an('object');\r",
+                                "  pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+                                "});\r",
+                                "\r",
+                                "\r",
+                                "pm.test(\"Response time is within the acceptable range\", function () {\r",
+                                "  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+                                "});\r",
+                                ""
+                            ],
+                            "type": "text/javascript",
+                            "packages": {}
+                        }
+                    }
+                ],
+                "id": "dbdaf0bb-df64-495a-813f-89ac2670475d",
+                "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                },
+                "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                        "mode": "raw",
+                        "raw": "{\r\n    \"nome\": \"Eduardo Maciel\",\r\n    \"email\": \"leicam@example.com\",\r\n    \"password\": \"senha123\",\r\n    \"administrador\": \"true\"\r\n}",
+                        "options": {
+                            "raw": {
+                                "language": "json"
+                            }
+                        }
+                    },
+                    "url": {
+                        "raw": "http://localhost:3000/usuarios",
+                        "protocol": "http",
+                        "host": [
+                            "localhost"
+                        ],
+                        "port": "3000",
+                        "path": [
+                            "usuarios"
+                        ]
+                    }
+                },
+                "response": [],
+                "uid": "35395270-dbdaf0bb-df64-495a-813f-89ac2670475d"
+            },
+            {
+                "name": "Buscar usuário inexistente",
+                "event": [
+                    {
+                        "listen": "test",
+                        "script": {
+                            "id": "aadaee2c-e641-4f1c-a89a-3ce0dbd7a118",
+                            "exec": [
+                                "pm.test(\"Response status code is 400\", function () {\r",
+                                "    pm.expect(pm.response.code).to.equal(400);\r",
+                                "});\r",
+                                "\r",
+                                "\r",
+                                "pm.test(\"Response has the required field - message\", function () {\r",
+                                "  const responseData = pm.response.json();\r",
+                                "  \r",
+                                "  pm.expect(responseData).to.be.an('object');\r",
+                                "  pm.expect(responseData.message).to.exist;\r",
+                                "});\r",
+                                "\r",
+                                "\r",
+                                "pm.test(\"Response has the expected Content-Type header - application/json\", function () {\r",
+                                "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+                                "});\r",
+                                "\r",
+                                "\r",
+                                "pm.test(\"Response time is less than 500ms\", function () {\r",
+                                "  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                                "});\r",
+                                ""
+                            ],
+                            "type": "text/javascript",
+                            "packages": {}
+                        }
+                    }
+                ],
+                "id": "9b66a35a-4d90-43c6-99cd-dce8695acc08",
+                "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                },
+                "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                        "raw": "http://localhost:3000/usuarios/IDInvalido",
+                        "protocol": "http",
+                        "host": [
+                            "localhost"
+                        ],
+                        "port": "3000",
+                        "path": [
+                            "usuarios",
+                            "IDInvalido"
+                        ]
+                    }
+                },
+                "response": [],
+                "uid": "35395270-9b66a35a-4d90-43c6-99cd-dce8695acc08"
+            }
+        ]
+    }
+}
